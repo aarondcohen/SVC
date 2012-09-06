@@ -7,7 +7,7 @@
 svc.Subject = Class.create({
 	// Our constructor just sets up the mapping from notifcations to functions.
 	initialize: function (args) {
-		this._notificationToObservers = $H();
+		this._notificationToObservers = {};
 	},
 
 	// Equality test is just a strict equals against another `subject` at this point. 
@@ -18,12 +18,12 @@ svc.Subject = Class.create({
 	// Destroy self. Notify that we are dead, and clear out all subscribed functions.
 	destroy: function () {
 		this.notify('subject:destroy');
-		this._notificationToObservers = $H();
+		this._notificationToObservers = {}; 
 	},
 
 	// Notify that a particular `notification` happened. The first variable passed along will be the subject.
 	notify: function (notification) {
-		var observers = this._notificationToObservers.get(notification);
+		var observers = this._notificationToObservers[notification];
 		var args = $A(arguments);
 		
 		// Remove the notification from the arguments array.
@@ -39,21 +39,21 @@ svc.Subject = Class.create({
 
 	// Add a subscription of a `f`unction call for a particular `notification`.
 	subscribe: function (notification, f) {
-		var observers = this._notificationToObservers.get(notification);
+		var observers = this._notificationToObservers.[notification];
 
 		if (observers) {
 			observers.push(f);
 		} else {
-			this._notificationToObservers.set(notification, [f]);
+			this._notificationToObservers.set[notification] = [f];
 		}
 	},
 
 	// Remove a subscription of a `f`unction call for a particular `notification`.
 	unsubscribe: function (notification, f) {
-		var observers = this._notificationToObservers.get(notification);
+		var observers = this._notificationToObservers[notification];
 
 		if (observers) {
-			this._notificationToObservers.set(notification, observers.without(f));
+			this._notificationToObservers.set[notification] = observers.without(f);
 		}
 	}
 });
