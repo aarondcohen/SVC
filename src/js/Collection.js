@@ -96,5 +96,3 @@ svc.Collection = Class.create(svc.Subject, {
 	}
 });
 
-// Mixin `Enumerable` functionality.
-svc.Collection.addMethods(Enumerable);
