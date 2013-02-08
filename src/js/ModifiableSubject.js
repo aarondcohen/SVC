@@ -12,6 +12,7 @@ svc.ModifiableSubject = Class.create(svc.Subject, {
 		this._dirty = false;
 		
 		// TODO: automatically do silent sets for all values in args that aren't reserved
+		console.log(args);
 	},
 
 	// Retrieve the particular value of a `property`.

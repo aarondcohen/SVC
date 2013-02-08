@@ -20,7 +20,7 @@ svc.ActionView = Class.create(svc.View, {
 		$super(args);
 
 		// We store the fire function so it can be unregistered later.
-		this._boundFireFunction = this.fire.bind(this);
+		this._boundFireFunction = _.bind(this.fire, this);
 
 		this.observeDOMEvents(args.events);
 	},
@@ -44,14 +44,15 @@ svc.ActionView = Class.create(svc.View, {
 
 		events.uniq().compact().each(
 			function (event) {
-				this.getField().observe(event, this._boundFireFunction);
+				// note - uses jQuery-style `bind` functionality
+				this.getField().bind(event, this._boundFireFunction);
 			}.bind(this)
 		);
 	},
 
 	// We call the desired `action` in the `controller` and include the `subject` as the first variable. 
 	fire: function () {
-		var args = $A(arguments);
+		var args = arguments;
 		args.unshift(this.getSubject());
 		this._controller[this._action].apply(this._controller, args);
 	}

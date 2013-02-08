@@ -17,7 +17,7 @@ svc.AjaxController = Class.create(svc.Controller, {
 	// We're adding a `callback` here to be called `onComplete`, but we should really rethink this.
 	makeRequest: function (args, callback) {
 		var boundOnSuccess = _.bind(this.onSuccess, this);
-		var wrappedSuccess = callback && typeof(callback) === 'function' ? _.bind(_.wrap(boundOnSuccess, callback)), this) : boundOnSuccess;
+		var wrappedSuccess = callback && typeof(callback) === 'function' ? _.bind(_.wrap(boundOnSuccess, callback), this) : boundOnSuccess;
 		$.ajax(
 			{
 				data: _.extend(this.parameters(), args),

@@ -14,8 +14,8 @@ svc.View = Class.create({
 		this._subject = args.subject;
 		this._element = this.draw();
 
-		this._subscribedFunctions = $H();
-		this.subscribe('subject:destroy', this.tearDown.bind(this));
+		this._subscribedFunctions = {};
+		this.subscribe('subject:destroy', _.bind(this.tearDown));
 	},
 	
 	// This will be where you define the main element of a view, you can also define other elements
@@ -54,19 +54,19 @@ svc.View = Class.create({
 	
 	// Subscribe a `function` to a particular `notification` issued by the subject.
 	subscribe: function (notification, fn) {
-		this._subscribedFunctions.set(notification, fn);
+		this._subscribedFunctions[notification] = fn;
 		this.getSubject() && this.getSubject().subscribe(notification, fn);
 	},
 	
 	// Unsubscribe from a particular `notification` issued by the `subject`.
 	unsubscribe: function (notification) {
 		var fn = this._subscribedFunctions.get(notification);
-		this._subscribedFunctions.unset(notification);
+		delete this._subscribedFunctions[notification];
 		this.getSubject() && this.getSubject().unsubscribe(notification, fn);
 	},
 	
 	// Clear out all subscribed functions for the view.
 	unsubscribeAll: function () {
-		this._subscribedFunctions.keys().each(this.unsubscribe.bind(this));
+		_.each(_.keys(this._subscribedFunctions), _.bind(this.unsubscribe, this));
 	}
 });
