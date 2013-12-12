@@ -7,6 +7,10 @@ describe("Subject tests", function () {
 
 	it("should be equal to itself", function () {
 		var subject = new svc.Subject();
-		expect(subject.toEqual(subject)).toBe(true);
+		expect(subject.isEqual(subject)).toBe(true);
+	});
+
+	it("should notify that it is going to destroy itself", function () {
+
 	});
 });
