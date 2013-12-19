@@ -12,7 +12,6 @@ svc.ModifiableSubject = Class.create(svc.Subject, {
 		this._dirty = false;
 		
 		// TODO: automatically do silent sets for all values in args that aren't reserved
-		console.log(args);
 	},
 
 	// Retrieve the particular value of a `property`.
@@ -22,7 +21,7 @@ svc.ModifiableSubject = Class.create(svc.Subject, {
 
 	// Get all the `properties` for a ModifiableSubject.
 	properties: function () {
-		var properties = $A();
+		var properties = [];
 		for (var property in this) {
 			if (property.charAt(0) === ':') {
 				properties.push(property.slice(1));

@@ -3,6 +3,7 @@ describe("Subject tests", function () {
 
 	beforeEach(function () {
 		subject = new svc.Subject();
+		spyOn(subject, 'notify').andCallThrough();
 	});
 
 	afterEach(function () {
@@ -11,7 +12,6 @@ describe("Subject tests", function () {
 	});
 
 	it("should be able to be created", function () {
-		expect(true).toBe(true); // we got here
 		expect(subject._notificationToObservers).toEqual({});
 	});
 
@@ -20,16 +20,12 @@ describe("Subject tests", function () {
 	});
 
 	it("should notify that it is going to destroy itself", function () {
-		spyOn(subject, 'notify').andCallThrough();
-
 		subject.destroy();
 		expect(subject.notify).toHaveBeenCalled();
 		expect(subject.notify).toHaveBeenCalledWith('subject:destroy');
 	});
 
 	it("should subscribe, notify, and destroy a new notification", function () {
-		spyOn(subject, 'notify').andCallThrough();
-
 		var bar = 0;
 		expect(subject._notificationToObservers).toEqual({});
 		subject.subscribe('test', function () { bar += 1; });
@@ -50,7 +46,6 @@ describe("Subject tests", function () {
 	});
 
 	it("should subscribe & unsubscribe from a notification", function () {
-		spyOn(subject, 'notify').andCallThrough();
 		var func = function () { bar += 1; };
 
 		var bar = 0;
