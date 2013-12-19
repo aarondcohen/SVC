@@ -24,7 +24,7 @@ svc.Subject = Class.create({
 	// Notify that a particular `notification` happened. The first variable passed along will be the subject.
 	notify: function (notification) {
 		var observers = this._notificationToObservers[notification];
-		var args = arguments;
+		var args = Array.prototype.slice.call(arguments);
 		
 		// Remove the notification from the arguments array.
 		args.shift();
@@ -33,7 +33,7 @@ svc.Subject = Class.create({
 		args.unshift(this);
 
 		if (observers) {
-			observers.invoke('apply', null, args);
+			_.invoke(observers, 'apply', null, args);
 		}
 	},
 
@@ -44,7 +44,7 @@ svc.Subject = Class.create({
 		if (observers) {
 			observers.push(f);
 		} else {
-			this._notificationToObserver[notification] = [f];
+			this._notificationToObservers[notification] = [f];
 		}
 	},
 
@@ -53,7 +53,7 @@ svc.Subject = Class.create({
 		var observers = this._notificationToObservers[notification];
 
 		if (observers) {
-			this._notificationToObservers.set[notification] = _.without(observers, f);
+			this._notificationToObservers[notification] = _.without(observers, f);
 		}
 	}
 });
