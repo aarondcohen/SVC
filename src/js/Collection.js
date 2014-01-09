@@ -11,7 +11,7 @@ svc.Collection = Class.create(svc.Subject, {
 		this._collection = args.collection || [];
 		this._sortFunction = args.sortFunction;
 		if (this._sortFunction) {
-			_.sortBy(this._collection, this._sortFunction);
+			this._collection = _.sortBy(this._collection, this._sortFunction, this._collection);
 		}
 	},
 	
@@ -49,7 +49,7 @@ svc.Collection = Class.create(svc.Subject, {
 			}
 		);
 
-		return index === this.size() ? -1 : index;
+		return index === (this.size() - 1) ? -1 : index;
 	},
 
 	// Determines whether or not an index fits into the `collection`.
@@ -77,7 +77,7 @@ svc.Collection = Class.create(svc.Subject, {
 	clear: function () {
 		var cleared = this.getAll();
 		this._collection = [];
-		cleared.invoke('notify', 'collection:clear');
+		_.invoke(cleared, 'notify', 'collection:clear');
 		this.notify('collection:clear');
 	},
 
