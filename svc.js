@@ -240,13 +240,13 @@ svc.View = Class.create({
 		this._element = this.draw();
 
 		this._subscribedFunctions = {};
-		this.subscribe('subject:destroy', _.bind(this.tearDown));
+		this.subscribe('subject:destroy', _.bind(this.tearDown, this));
 	},
 	
 	// This will be where you define the main element of a view, you can also define other elements
 	// which can be stored as instance variables to reduce page wide scans.
 	draw: function () {
-		throw "View.js: draw must be defined in a subclass.";
+		throw new Error("View.js: draw must be defined in a subclass.");
 	},
 	
 	// This will need to go, but is required for now.
@@ -258,7 +258,7 @@ svc.View = Class.create({
 	// from the page and unsubscribes all events. Feel free to override it as needed.
 	tearDown: function () {
 		var element = this.getElement();
-		if (element) {
+		if (element && element.hide) {
 			element.hide();
 			var parentElement = element.parentNode;
 			if (parentElement) { parentElement.removeChild(element); }
@@ -280,14 +280,18 @@ svc.View = Class.create({
 	// Subscribe a `function` to a particular `notification` issued by the subject.
 	subscribe: function (notification, fn) {
 		this._subscribedFunctions[notification] = fn;
-		this.getSubject() && this.getSubject().subscribe(notification, fn);
+		if (this.getSubject()) {
+			this.getSubject().subscribe(notification, fn);
+		}
 	},
 	
 	// Unsubscribe from a particular `notification` issued by the `subject`.
 	unsubscribe: function (notification) {
-		var fn = this._subscribedFunctions.get(notification);
+		var fn = this._subscribedFunctions[notification];
 		delete this._subscribedFunctions[notification];
-		this.getSubject() && this.getSubject().unsubscribe(notification, fn);
+		if (this.getSubject()) {
+			this.getSubject().unsubscribe(notification, fn);
+		}
 	},
 	
 	// Clear out all subscribed functions for the view.
