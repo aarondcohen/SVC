@@ -38,21 +38,21 @@ svc.ActionView = Class.create(svc.View, {
 			return;
 		}
 
-		if (!Object.isArray(events)) {
+		if (!_.isArray(events)) {
 			events = [events];
 		}
 
-		events.uniq().compact().each(
+		_.chain(events).uniq().compact().each(
 			function (event) {
 				// note - uses jQuery-style `bind` functionality
 				this.getField().bind(event, this._boundFireFunction);
 			}.bind(this)
-		);
+		).value();
 	},
 
 	// We call the desired `action` in the `controller` and include the `subject` as the first variable. 
 	fire: function () {
-		var args = arguments;
+		var args = Array.prototype.slice.call(arguments, 0);
 		args.unshift(this.getSubject());
 		this._controller[this._action].apply(this._controller, args);
 	}
