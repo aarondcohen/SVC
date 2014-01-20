@@ -12,11 +12,15 @@ svc.AjaxSingleRequestController = Class.create(svc.AjaxController, {
 	
 	// Make a request if nothing is in progress.
 	makeRequest: function ($super, args, callback) {
-		if (this._inProgress) { return; }
-		this._inProgress = true;
+		if (this._inProgress) { return false; }
+		this.setProgress(true);
 		$super(args, callback);
 	},
 
+	setProgress: function (progress) {
+		this._inProgress = progress;
+	},
+
 	// When the request finishes, unlock the progress lock
-	onComplete: function () { this._inProgress = false; }
+	onComplete: function () { this.setProgress(false); }
 });

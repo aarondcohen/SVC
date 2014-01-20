@@ -33,15 +33,12 @@ svc.AjaxController = Class.create(svc.Controller, {
 
 	// Defines the `method` of the request (usually `POST` or `GET`).
 	method: function () {
-		if (! this._actionMethod) { throw "AjaxController.js: method must be defined"; }
+		if (! this._actionMethod) { throw new Error("AjaxController.js: method must be defined"); }
 		return this._actionMethod;
 	},
 
 	// The method called when the AJAX request is completed.
 	onComplete: function () {},
-	
-	// The method called when the AJAX request is created.
-	onCreate:   function () {},
 	
 	// The method called when the AJAX request fails.
 	onFailure:  function () {},
@@ -54,7 +51,7 @@ svc.AjaxController = Class.create(svc.Controller, {
 
 	// Retrieves the `actionPath` of the request.
 	path: function () {
-		if (! this._actionPath) { throw "AjaxController.js: path must be defined"; }
+		if (! this._actionPath) { throw new Error("AjaxController.js: path must be defined"); }
 		return this._actionPath;
 	}
 });

@@ -402,15 +402,12 @@ svc.AjaxController = Class.create(svc.Controller, {
 
 	// Defines the `method` of the request (usually `POST` or `GET`).
 	method: function () {
-		if (! this._actionMethod) { throw "AjaxController.js: method must be defined"; }
+		if (! this._actionMethod) { throw new Error("AjaxController.js: method must be defined"); }
 		return this._actionMethod;
 	},
 
 	// The method called when the AJAX request is completed.
 	onComplete: function () {},
-	
-	// The method called when the AJAX request is created.
-	onCreate:   function () {},
 	
 	// The method called when the AJAX request fails.
 	onFailure:  function () {},
@@ -423,7 +420,7 @@ svc.AjaxController = Class.create(svc.Controller, {
 
 	// Retrieves the `actionPath` of the request.
 	path: function () {
-		if (! this._actionPath) { throw "AjaxController.js: path must be defined"; }
+		if (! this._actionPath) { throw new Error("AjaxController.js: path must be defined"); }
 		return this._actionPath;
 	}
 });
@@ -441,12 +438,16 @@ svc.AjaxSingleRequestController = Class.create(svc.AjaxController, {
 	
 	// Make a request if nothing is in progress.
 	makeRequest: function ($super, args, callback) {
-		if (this._inProgress) { return; }
-		this._inProgress = true;
+		if (this._inProgress) { return false; }
+		this.setProgress(true);
 		$super(args, callback);
 	},
 
+	setProgress: function (progress) {
+		this._inProgress = progress;
+   	},
+
 	// When the request finishes, unlock the progress lock
-	onComplete: function () { this._inProgress = false; }
+	onComplete: function () { this.setProgress(false); }
 });
 })(null || (function(){ return this; })(), "2.0");
